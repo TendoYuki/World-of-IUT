@@ -1,5 +1,4 @@
 #include "stack.h"
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -22,4 +21,8 @@ Stack* StackPush(Stack* stack, char* name, char* desc){
     }
     free(new);
     return NULL;
+}
+
+Location* StackHead(Stack* stack){
+    return stack->location;
 }
