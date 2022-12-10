@@ -5,17 +5,17 @@
 /**
  * 
 */
-extern const empty_stack = (Stack*)NULL;
+const Stack *empty_stack = (Stack*)NULL;
 
-bool StackIsEmpty(Stack* stack){
+bool StackIsEmpty(Stack *stack){
     return stack==empty_stack;
 }
 
-Stack* StackPush(Stack* stack, char* name, char* desc){
+Stack *StackPush(Stack *stack, Location *location){
     Stack* new = malloc(sizeof(Stack));
     if(!new) return NULL;
-    if (stack && name && desc){
-        new->location = LocationNew(name,desc);
+    if (stack && location){
+        new->location = location;
         new->next = stack;
         return new;
     }
@@ -23,10 +23,10 @@ Stack* StackPush(Stack* stack, char* name, char* desc){
     return NULL;
 }
 
-Location* StackHead(Stack* stack){
+Location *StackHead(Stack *stack){
     return stack->location;
 }
 
-Stack* StackPop(Stack* stack){
+Stack *StackPop(Stack *stack){
     return stack->next;
 }

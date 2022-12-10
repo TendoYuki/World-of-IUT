@@ -51,9 +51,12 @@ void cmdLook(Game *game, char *args)
     Mobile *player=game->player;
     if (!strcasecmp(args,"me")) MobilePrint(player);
     else if (!strcasecmp(args,"around"))
-				printf("You are nowhere! You (God) should create some locations...\n");
-		else
-				printf("You look %s. Well nothing there. You (God) should create some locations...\n",args); // default message
+        printf("You look around. You see\n%s\n", game->player->location->desc);
+    else {
+        Direction dir=strtodir(args);
+        if (dir == WRONGDIR) printf("You cannot look %s\n",args);
+        printf("You look %s. You see %s\n",args, game->player->location->directions[dir]->name); // default message
+    }
 }
 
 /* react to command "go". The direction to move in is given by args */
@@ -67,7 +70,10 @@ void cmdGo(Game *game,char *args)
 
     Direction dir=strtodir(args);
     if (dir == WRONGDIR) printf("You cannot go %s\n",args);
-    else printf("You try to go %s, but you cannot go %s from nowhere. You (God) should create some locations...\n",args, args);
+    else {
+        MobileMove(game->player, game->player->location->directions[dir]);
+        LocationPrint(game->player->location);
+    }
 }
 
 

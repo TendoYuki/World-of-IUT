@@ -31,3 +31,6 @@ void MobilePrint(Mobile *m)
     if (m) printf("%s\n%s\n",m->name,m->desc);
 }
 
+void *MobileMove(Mobile *m, Location *location) {
+    if(location && m) m->location = location;
+}
