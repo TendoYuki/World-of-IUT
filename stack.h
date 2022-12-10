@@ -5,10 +5,10 @@
 typedef struct Stack
 {
     Location* location;
-    Stack* next;
+    struct Stack* next;
 }Stack;
 
-extern const empty_stack;
+extern const Stack *empty_stack;
 
 /**
  * Verifies if the stack is empty
@@ -16,9 +16,9 @@ extern const empty_stack;
 bool StackIsEmpty(Stack *stack);
 
 /**
- * Creates a new Stack and push it into the current stack
+ * Creates a new Stack and push it into the current stack, returns the new stack
 */
-Stack *StackPush(Stack *stack,char *name, char *desc);
+Stack *StackPush(Stack *stack, Location *location);
 
 /**
  * Returns the location of the head of the stack 
