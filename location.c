@@ -73,40 +73,40 @@ void LocationPrintShort(Location *location) {
 Location *LocationInit(Game* game) {
     Stack *locationStack;
 
-    Location* OnTheRoad1 = LocationNew("On the road", "The road goes north and south, at the west you see the frontyard of a house"); 
+    Location* OnTheRoad1 = LocationNew("The Road", "You are at the middle of a long road"); 
     locationStack = StackPush(locationStack, OnTheRoad1);
 
-    Location* OnTheRoad2 = LocationNew("On the road", "The road stops there the only way is going south"); 
+    Location* OnTheRoad2 = LocationNew("The Road", "You are at the end of a long road, something is blocking your path"); 
     locationStack = StackPush(locationStack, OnTheRoad2);
 
-    Location* OnTheRoad3 = LocationNew("On the road", "The road stops there the only way is going north"); 
+    Location* OnTheRoad3 = LocationNew("The Road", "You are at the end of a long road, something is blocking your path"); 
     locationStack = StackPush(locationStack, OnTheRoad3);
 
-    Location* Frontyard = LocationNew("Frontyard", "You see the entrance of the house at the west, at the east you can see a long road"); 
+    Location* Frontyard = LocationNew("The Frontyard", "You are in the frontyard"); 
     locationStack = StackPush(locationStack, Frontyard);
 
-    Location* Entrance = LocationNew("Entrance", "You are at the entrance of the house.\nYou see the dining room at the north\nYou see the living room at the south\nAbove you you see what seems to be the entrance to the Attic\nBelow you is a trapdoor that leads to the Cellar"); 
+    Location* Entrance = LocationNew("The Entrance", "You are at the entrance of the house"); 
     locationStack = StackPush(locationStack, Entrance);
 
-    Location* DiningRoom = LocationNew("Dining room", "You are in the dining room,\nYou see the kitchen at the west\nYou see the entrance at the south"); 
+    Location* DiningRoom = LocationNew("The Dining room", "You are in the dining room"); 
     locationStack = StackPush(locationStack, DiningRoom);
 
-    Location* Kitchen = LocationNew("Kitchen", "You are in the kitchen, please don't eat anything\nYou see the laundry room at the south\nYou see the Dining room at the west"); 
+    Location* Kitchen = LocationNew("The Kitchen", "You are in the kitchen, please don't eat anything"); 
     locationStack = StackPush(locationStack, Kitchen);
 
-    Location* LaundryRoom = LocationNew("Laundry room", "You are in the laundry room,\nYou see the office at the south\nYou see the kitchen at the north"); 
+    Location* LaundryRoom = LocationNew("The Laundry room", "You are in the laundry room,"); 
     locationStack = StackPush(locationStack, LaundryRoom);
 
-    Location* Office = LocationNew("Office", "You are in the office,\nYou see the living room at the east\nYou see the laundry room at the north"); 
+    Location* Office = LocationNew("The Office", "You are in the office"); 
     locationStack = StackPush(locationStack, Office);
 
-    Location* LivingRoom = LocationNew("Living room", "You are in the living room, you cannot die in the living room...\nYou see the entrance at the north\nYou see the office at the west"); 
+    Location* LivingRoom = LocationNew("The Living room", "You are in the living room, you cannot die in the living room..."); 
     locationStack = StackPush(locationStack, LivingRoom);
 
-    Location* Attic = LocationNew("Attic", "You are in the attic, only spiders and bats are there\nYour only way out is going back down"); 
+    Location* Attic = LocationNew("The Attic", "You are in the attic, only spiders and bats are there"); 
     locationStack = StackPush(locationStack, Attic);
 
-    Location* Cellar = LocationNew("Cellar", "You are in the cellar, nothing is there\nYour only way out is going back up"); 
+    Location* Cellar = LocationNew("The Cellar", "You are in the cellar, nothing is there"); 
     locationStack = StackPush(locationStack, Cellar);
 
     // On the road 1

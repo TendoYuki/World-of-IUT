@@ -24,6 +24,7 @@ void cmdHelp()
         "                look east from the current room). Allowed directions are north, east,\n"
         "                south, west, up, and down.\n"
         "- go <dir>:     to go in the given direction.\n"
+        "- exits:        to see all the possible exits of your current place\n"
     );
 }
 
@@ -55,10 +56,19 @@ void cmdLook(Game *game, char *args)
     else {
         Direction dir=strtodir(args);
         if (dir == WRONGDIR) printf("You cannot look %s\n",args);
-        printf("You look %s. You see %s\n",args, game->player->location->directions[dir]->name); // default message
+        if (game->player->location->directions[dir]) printf("You look %s. You see %s\n",args, game->player->location->directions[dir]->name);
+        else printf("You look %s. Nothing's there\n",args);
     }
 }
 
+void cmdLookExits(Game *game){
+    char *dir_str[]={"north","east","south","west","up","down"};
+    for (int i=0;i<6;i++){
+        if(game->player->location->directions[i]){
+            printf("If you look %s, You see %s\n",dir_str[i],game->player->location->directions[i]->name);
+        }
+    }
+}
 /* react to command "go". The direction to move in is given by args */
 void cmdGo(Game *game,char *args)
 {
@@ -107,6 +117,7 @@ void parseAndExecute(char *line, Game *game)
             else if (!strcasecmp(name,"quit")) cmdQuit(game); /* cmd=="quit" -> call cmdQuit(). Also properly shuts the game down */
             else if (!strcasecmp(name,"look")) cmdLook(game,args); /* cmd=="look" -> call cmdLook(). args specify where/what to look. game contains the necessary info about stuff to look at */
             else if (!strcasecmp(name,"go")) cmdGo(game,args); /* cmd="go" -> call cmdGo(). args specify where to go. game contains info about locations and will update the player's location */
+            else if (!strcasecmp(name,"exits")) cmdLookExits(game);
             else printf("Command not found. Try 'help'\n");
         }
         else printf("Command not found. Try 'help'\n");

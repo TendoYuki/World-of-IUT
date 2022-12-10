@@ -18,6 +18,7 @@ typedef struct Location {
     char *name;
     char *desc;
     struct Location **directions;
+    
 } Location;
 
 
