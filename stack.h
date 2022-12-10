@@ -13,7 +13,7 @@ extern const empty_stack;
 /**
  * Verify if the stack is empty
 */
-bool StackIfEmpty(Stack* stack);
+bool StackIsEmpty(Stack* stack);
 
 /**
  * Create a new Stack and push it into the current stack

@@ -19,7 +19,7 @@ typedef struct Location {
 } Location;
 
 /**
- * Creates and retruns a newly allocated location with malloc()
+ * Creates and returns a newly allocated location with malloc()
 */
 Location *LocationNew(char *name, char *desc);
 
