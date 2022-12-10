@@ -7,12 +7,12 @@
 */
 extern const empty_stack = (Stack*)NULL;
 
-bool StackIsEmpty(Stack* stack){
+bool StackIsEmpty(Stack *stack){
     return stack==empty_stack;
 }
 
-Stack* StackPush(Stack* stack, char* name, char* desc){
-    Stack* new = malloc(sizeof(Stack));
+Stack *StackPush(Stack *stack, char *name, char *desc){
+    Stack *new = malloc(sizeof(Stack));
     if(!new) return NULL;
     if (stack && name && desc){
         new->location = LocationNew(name,desc);
@@ -23,10 +23,10 @@ Stack* StackPush(Stack* stack, char* name, char* desc){
     return NULL;
 }
 
-Location* StackHead(Stack* stack){
+Location *StackHead(Stack *stack){
     return stack->location;
 }
 
-Stack* StackPop(Stack* stack){
+Stack *StackPop(Stack *stack){
     return stack->next;
 }
