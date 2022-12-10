@@ -24,7 +24,9 @@ Location *LocationNew(char *name, char *desc) {
     }
     return location;
 }
-
+/**
+ * Binds a location to a direction of a certain other location
+*/
 void LocationSetExit(Location *location, Direction direction, Location *destination) {
     switch(direction) {
         case NORTH:
@@ -107,29 +109,52 @@ Location *LocationInit(Game* game) {
     Location* Cellar = LocationNew("Cellar", "You are in the cellar, nothing is there\nYour only way out is going back up"); 
     locationStack = StackPush(locationStack, Cellar);
 
+    // On the road 1
     LocationSetExit(OnTheRoad1, NORTH, OnTheRoad2);
     LocationSetExit(OnTheRoad1, SOUTH, OnTheRoad3);
     LocationSetExit(OnTheRoad1, WEST, Frontyard);
+
+    // On the road 2
     LocationSetExit(OnTheRoad2, SOUTH, OnTheRoad1);
+
+    // On the road 3
     LocationSetExit(OnTheRoad3, NORTH, OnTheRoad1);
+
+    // In the frontyard
     LocationSetExit(Frontyard, WEST, Entrance);
     LocationSetExit(Frontyard, EAST, OnTheRoad1);
+
+    // In the entrance
     LocationSetExit(Entrance, NORTH, DiningRoom);
     LocationSetExit(Entrance, UP, Attic);
     LocationSetExit(Entrance, DOWN, Cellar);
     LocationSetExit(Entrance, SOUTH, LivingRoom);
     LocationSetExit(Entrance, EAST, Frontyard);
+
+    // In the dining room
     LocationSetExit(DiningRoom, SOUTH, Entrance);
     LocationSetExit(DiningRoom, WEST, Kitchen);
+
+    // In the Kitchen
     LocationSetExit(Kitchen, EAST, DiningRoom);
     LocationSetExit(Kitchen, SOUTH, LaundryRoom);
+
+    // In the laundry room
     LocationSetExit(LaundryRoom, NORTH, Kitchen);
     LocationSetExit(LaundryRoom, SOUTH, Office);
+
+    // In the office
     LocationSetExit(Office, NORTH, LaundryRoom);
     LocationSetExit(Office, EAST, LivingRoom);
+    
+    // In the living room
     LocationSetExit(LivingRoom, WEST, Office);
     LocationSetExit(LivingRoom, NORTH, Entrance);
+
+    // In the attic
     LocationSetExit(Attic, DOWN, Entrance);
+
+    // In the cellar
     LocationSetExit(Cellar, UP, Entrance);
     
 
