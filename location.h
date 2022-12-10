@@ -1,4 +1,3 @@
-
 /**
  * Location type having a name and a desctiption
  * Property Directions is a table of pointer locations, which each NULL Location represents the absence of one
