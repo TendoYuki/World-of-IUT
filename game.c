@@ -1,7 +1,7 @@
 #include "game.h"
 #include "mobile.h"
-#include "location.h"
 #include <stdlib.h> /* malloc, free, NULL */
+#include "location.h"
 
 /* Initialize everything that makes up the game: player and locations */
 Game *GameInit()
@@ -10,7 +10,7 @@ Game *GameInit()
     if(ret)
     {
         ret->player = MobileNew("You", "A very dynamic and adventurous young person!");
-        MobileMove(ret->player,LocationInit());
+        MobileMove(ret->player,LocationInit(ret));
     }
     return ret;
 }

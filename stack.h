@@ -1,12 +1,7 @@
 #ifndef STACK_H
 #define STACK_H
 #include <stdbool.h>
-#include "location.h" 
-typedef struct Stack
-{
-    Location* location;
-    struct Stack* next;
-}Stack;
+#include "types.h"
 
 extern const Stack *empty_stack;
 

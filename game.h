@@ -2,13 +2,7 @@
 #define GAME_H
 
 #include "mobile.h"
-#include "stack.h"
-
-typedef struct
-{
-    Mobile *player;
-    Stack *locationStack;
-} Game;
+#include "types.h"
 
 extern Game *GameInit();
 extern Game *GameShutdown(Game *g);
