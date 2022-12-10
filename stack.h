@@ -23,6 +23,11 @@ Stack* StackPush(Stack* stack,char* name, char* desc);
 /**
  * Returns the location of the head of the stack 
 */
-Location* StackHead(Stack*);
+Location* StackHead(Stack* stack);
+
+/**
+ * Returns the stack without the stack head
+*/
+Stack* StackPop(Stack* stack);
 
 #endif

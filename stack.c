@@ -26,3 +26,7 @@ Stack* StackPush(Stack* stack, char* name, char* desc){
 Location* StackHead(Stack* stack){
     return stack->location;
 }
+
+Stack* StackPop(Stack* stack){
+    return stack->next;
+}
