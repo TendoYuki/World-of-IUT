@@ -4,15 +4,15 @@ Location *LocationNew(char *name, char *desc) {
 
 }
 
-void LocationDelete(Location*) {
+void LocationDelete(Location* location) {
 
 }
 
-void LocationPrint(Location*) {
+void LocationPrint(Location* location) {
 
 }
 
-void LocationPrintShort(Location*) {
+void LocationPrintShort(Location* location) {
 
 }
 

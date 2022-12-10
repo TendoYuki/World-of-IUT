@@ -1,3 +1,6 @@
+#ifndef LOCATION_H
+#define LOCATION_H
+
 /**
  * Location type having a name and a desctiption
  * Property Directions is a table of pointer locations, which each NULL Location represents the absence of one
@@ -23,17 +26,17 @@ Location *LocationNew(char *name, char *desc);
 /**
  * Destroys and deallocates a location passed in parameter
 */
-void LocationDelete(Location*);
+void LocationDelete(Location* location);
 
 /**
  * Displays in the terminal a location passed in parameter
 */
-void LocationPrint(Location*);
+void LocationPrint(Location* location);
 
 /**
  * Displays shortly in the terminal a location passed in parameter
 */
-void LocationPrintShort(Location*);
+void LocationPrintShort(Location* location);
 
 /**
  * Creates and allocates all locations available
@@ -44,3 +47,5 @@ void LocationInit();
  * Destroys and deallocates all locations available
 */
 void LocationDestroy();
+
+#endif
