@@ -185,7 +185,8 @@ char *getInput()
 void parseAndExecute(char *line, Game *game)
 {
     if (line && game) /* check pointers validity */
-    {
+    {   
+        char *lineCpy = strdup(line);      
         char *name=strtok(line,sep); /* extract first word = command */
         if (name) // null pointer if line just contains a return (empty line)
         {
@@ -196,8 +197,18 @@ void parseAndExecute(char *line, Game *game)
             else if (!strcasecmp(name,"look")) cmdLook(game,args); /* cmd=="look" -> call cmdLook(). args specify where/what to look. game contains the necessary info about stuff to look at */
             else if (!strcasecmp(name,"go")) cmdGo(game,args); /* cmd="go" -> call cmdGo(). args specify where to go. game contains info about locations and will update the player's location */
             else if (!strcasecmp(name,"exits")) cmdLookExits(game);
-            else if (!strcasecmp(name,"get")) cmdGet(game,args);
-            else if (!strcasecmp(name,"drop")) cmdDrop(game,args);
+            else if (!strcasecmp(name,"get")) {
+                char *unparesdArgs = strndup(strchr(lineCpy, ' ') + 1, strlen(strchr(lineCpy, ' ') + 1) - 1); // Manipluation necessary to get argument with spaces
+                cmdGet(game,unparesdArgs);
+                free(unparesdArgs);
+                free(lineCpy);
+            } 
+            else if (!strcasecmp(name,"drop")) {
+                char *unparesdArgs = strndup(strchr(lineCpy, ' ') + 1, strlen(strchr(lineCpy, ' ') + 1) - 1); // Manipluation necessary to get argument with spaces
+                cmdDrop(game,unparesdArgs);
+                free(unparesdArgs);
+                free(lineCpy);
+            }
             else if (!strcasecmp(name,"inventory")) cmdInventory(game);
             else printf("Command not found. Try 'help'\n");
         }

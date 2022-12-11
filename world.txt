@@ -52,7 +52,7 @@ Knife
 7
 Looks quite sharp ! It might help...
 @object 2
-Dead_rat
+Dead rat
 11
 Eww disgusting !
 @object 3
@@ -64,6 +64,6 @@ Phone
 9
 An old blackberry one !
 @object 5
-Old_Clothes
+Old Clothes
 8
 Looks like it belonged to an old person.
