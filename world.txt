@@ -1,48 +1,69 @@
 @room 1
 The Road
 2 -1 3 4 -1 -1
-You are at the middle of a long road
+You are at the middle of a long road.
 @room 2
 The Road
 -1 -1 1 -1 -1 -1
-You are at the end of a long road, something is blocking your path
+You are at the end of a long road, something is blocking your path but you are too dumb to get over it.
 @room 3
 The Road
 1 -1 -1 -1 -1 -1
-You are at the end of a long road, something is blocking your path
+You are at the end of a long road, something is blocking your path but you are too dumb to get over it.
 @room 4
 The Frontyard
 -1 1 -1 5 -1 -1
-You are in the frontyard
+You are in the frontyard, gargoyls stands tall around your way to the entrance.
 @room 5
 The Entrance
 6 4 10 -1 11 12
-You are at the entrance of the house
+You are at the entrance of the manor, as you enter this room you hear a scream coming from above.
 @room 6
 The Dining Room
 -1 -1 5 7 -1 -1
-You are in the dining room
+You are in the dining room, shattered plates and glasses are everywhere.
 @room 7
 Kitchen
 -1 6 8 -1 -1 -1
-You are in the kitchen, please don't eat anything
+You are in the kitchen, the food looks rotten, it might not be a great idea to touch it !
 @room 8
 Laundry Room
 7 -1 9 -1 -1 -1
-You are in the laundry room
+You are in the laundry room, piles of old clothes litters the ground.
 @room 9
 Office
 8 10 -1 -1 -1 -1
-You are in the office
+You are in the office, an 80's century wrecked computer is standing on a rotten desk.
 @room 10
 Living Room
 5 -1 -1 9 -1 -1
-You are in the living room, you cannot die in the living room...
+You are in the living room, five wooden dolls are looking at you, you feel a strange cold in your spine.
+You shouldn't be able to die in the living room... You feel reassured thinking about that.
 @room 11
 Attic
 -1 -1 -1 -1 -1 5
-You are in the attic, only spiders and bats are there
+You are in the attic, it seems that only spiders, rats and bats are there...
 @room 12
 Cellar
 -1 -1 -1 -1 5 -1
-You are in the cellar, nothing is there
+You are in the cellar, standing in the center of the room is a rocking chair surrounded by nothing else
+@object 1
+Knife
+7
+Looks quite sharp ! It might help...
+@object 2
+Dead_rat
+11
+Eww disgusting !
+@object 3
+Corpse
+11
+Looks like the rat killed someone! maybe they killed eachother ?
+@object 4
+Phone
+9
+An old blackberry one !
+@object 5
+Old_Clothes
+8
+Looks like it belonged to an old person.

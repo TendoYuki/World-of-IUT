@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "stack.h"
+#include "object.h"
 
 Location *LocationNew(char *name, char *desc) {
     Location *location;
@@ -41,9 +42,19 @@ void LocationSetExit(Location *location, Direction direction, Location *destinat
             location->directions[2] = destination;
             break;
         case WEST:
+            location->directions[3] = destination;
+            break;
+        case UP:
+            location->directions[4] = destination;
+            break;
+        case DOWN:
+            location->directions[5] = destination;
+            break;
+        default:
             return;
             break;
     }
+
 }
 
 void LocationDelete(Location *location) {
@@ -51,6 +62,12 @@ void LocationDelete(Location *location) {
     {
         if (location->name) free(location->name);
         if (location->desc) free(location->desc);
+        if (location->objects){
+            for (int i=0;i<6;i++){
+                if(location->objects[i]) free(location->objects[i]);
+            }
+            free(location->objects);
+        }
         free(location);
     }
 }
@@ -64,17 +81,21 @@ void LocationPrintShort(Location *location) {
 }
 
 
-Stack *readFile(char *fileName) {
+Stack *readFile(Game* game, char *fileName) {
     const int possible_directions = 6;
+    const int max_object_per_room = 6;
     //Checks if the filename is not null
     if(!fileName) return NULL;
 
     Location **locationList = malloc(sizeof(Location*));
     int locationCount = 0;
 
-    int** links = malloc(sizeof(int*));
-
+    Object **objectList= malloc(sizeof(Object*));
     int objectCount = 0;
+
+    int** locationLinks = malloc(sizeof(int*));
+    int** objectLinks = malloc(sizeof(int*));
+
 
     //Opens the file
     FILE *file;
@@ -96,11 +117,15 @@ Stack *readFile(char *fileName) {
             locationCount++;
             locationList = realloc(locationList, sizeof(Location*) * locationCount);
             locationList[locationCount-1] = malloc(sizeof(Location));
+            locationList[locationCount-1]->objects = malloc(sizeof(Object*) * max_object_per_room);
+            for (int i = 0; i < max_object_per_room; i++) locationList[locationCount-1]->objects[i] = NULL;
             locationList[locationCount-1]->directions = malloc(sizeof(Location*) * possible_directions);
 
-            links = realloc(links, sizeof(int*) * locationCount);
+            locationList[locationCount-1]->desc = NULL;
+            locationList[locationCount-1]->name = NULL;
+            locationLinks = realloc(locationLinks, sizeof(int*) * locationCount);
 
-            links[locationCount-1] = malloc(sizeof(int) * possible_directions);
+            locationLinks[locationCount-1] = malloc(sizeof(int) * possible_directions);
 
             subIndex=0;
             readingObject = false;
@@ -113,14 +138,24 @@ Stack *readFile(char *fileName) {
         }
         //Checks if we are reading a object header
         else if (strstr(line, "@object") != NULL) {
-            printf("\n");
+            objectCount++;
+            objectList = realloc(objectList, sizeof(Object*) * objectCount);
+            objectList[objectCount-1] = malloc(sizeof(Object));
+
+            objectLinks = realloc(objectLinks, sizeof(int*) * objectCount);
+
+            objectLinks[objectCount-1] = malloc(sizeof(int));
+
+            objectList[objectCount-1]->desc = NULL;
+            objectList[objectCount-1]->name = NULL;
+
             subIndex=0;
             readingObject = true;
             readingRoom = false;
-            
 
-            // line = strtok(line, " ");
-            // printf("Object number : %s", strtok(NULL, " "));
+            char *token = strtok(line, " ");
+            token = strtok(NULL, " ");
+            objectList[objectCount-1]->index = atoi(token);
         }
 
         //If we are reading a object and not its header
@@ -129,15 +164,36 @@ Stack *readFile(char *fileName) {
             {
                 // If its the Title line
                 case 0:
-                    printf("title : %s", line);
+                    objectList[objectCount-1]->name = strndup(line, strlen(line) - 1);
                     break;
                 // If its the Indexes line
                 case 1:
-                    printf("index : %s", line);
+                    objectLinks[objectCount-1][0] = atoi(line);
                     break;
                 // If its the Description Line
                 case 2:
-                    printf("%s", line);
+                    //If there is no description, allocates memory for the description of size equal to the size of the line
+                    if(!objectList[objectCount-1]->desc) {
+                        objectList[objectCount-1]->desc = strdup(line);
+                    }
+
+                    /*
+                    If there is already a description, meaning that we are reading a multi line description
+                    We are going to create a variable cpy of the size of the already stored description to which will be added the size of the current line
+                    We are then going to copy the already stored description in the cpy variable And concatenate it with the current line
+                    Then we are going to reallocate the already stored description to its size plus the size of the current line  
+                    And finally we will copy the temp variable into the description and freeing the copy
+
+                    TL;DR Concatenates the already stored description with the current line
+                    */
+                    else {
+                        char *cpy = malloc((sizeof(char*) * strlen(objectList[objectCount-1]->desc)+(sizeof(char*) * (strlen(line) + 1))));
+                        strcpy(cpy, objectList[objectCount-1]->desc);
+                        strcat(cpy, line);
+                        free(objectList[objectCount-1]->desc);
+                        objectList[objectCount-1]->desc = strndup(cpy, strlen(cpy) - 1);
+                        free(cpy);
+                    }
                     break;
             }
             subIndex++;
@@ -149,25 +205,22 @@ Stack *readFile(char *fileName) {
             {
                 // If its the Title line
                 case 0:
-                    locationList[locationCount-1]->name = malloc(sizeof(char*) * (strlen(line) + 1));
-                    strcpy(locationList[locationCount-1]->name, line);
+                    locationList[locationCount-1]->name = strndup(line, strlen(line) - 1);
                     break;
                 // If its the Index line
                 case 1:
                     char *token = strtok(line, " ");
-                    links[locationCount-1][0] = atoi(token); 
+                    locationLinks[locationCount-1][0] = atoi(token); 
                     for (int i = 1; i < possible_directions ; i++) {
                         token = strtok(NULL, " ");
-                        links[locationCount-1][i] = atoi(token); 
+                        locationLinks[locationCount-1][i] = atoi(token); 
                     }
-                    // locationList[locationCount-1]->directions = atoi(line);//
                     break;
                 // If its the Description Line
                 default:
                     //If there is no description, allocates memory for the description of size equal to the size of the line
                     if(!locationList[locationCount-1]->desc) {
-                        locationList[locationCount-1]->desc = malloc(sizeof(char*) * (strlen(line) + 1));
-                        strcpy(locationList[locationCount-1]->desc, line);
+                        locationList[locationCount-1]->desc = strdup(line);
                     }
 
                     /*
@@ -183,8 +236,8 @@ Stack *readFile(char *fileName) {
                         char *cpy = malloc((sizeof(char*) * strlen(locationList[locationCount-1]->desc)+(sizeof(char*) * (strlen(line) + 1))));
                         strcpy(cpy, locationList[locationCount-1]->desc);
                         strcat(cpy, line);
-                        locationList[locationCount-1]->desc = realloc(locationList[locationCount-1]->desc, (sizeof(char*) * strlen(locationList[locationCount-1]->desc)+(sizeof(char*) * (strlen(line) + 1))));
-                        strcpy(locationList[locationCount-1]->desc, cpy);
+                        free(locationList[locationCount-1]->desc);
+                        locationList[locationCount-1]->desc = strdup(cpy);
                         free(cpy);
                     }
                     break;
@@ -194,12 +247,24 @@ Stack *readFile(char *fileName) {
     }
 
     Stack *locationStack;
-
+    for (int j = 0; j < objectCount ; j++) {
+        if(objectLinks[j][0] == -1) {
+            AddObjectToInventory(game->player, objectList[j]);
+        }
+        else {
+            for(int i = 0; i < max_object_per_room ; i++) {
+                if(locationList[objectLinks[j][0]-1]->objects[i] != NULL) continue;
+                locationList[objectLinks[j][0]-1]->objects[i] = objectList[j];
+                break;
+            }
+        }
+    }
     for (int i = locationCount-1; i >= 0 ; i--) {
         for (int j = 0; j < possible_directions ; j++) {
-            if(links[i][j] == -1) continue;
-            LocationSetExit(locationList[i], j, locationList[links[i][j]-1]);
+            if(locationLinks[i][j] == -1) continue;
+            LocationSetExit(locationList[i], j, locationList[locationLinks[i][j]-1]);
         }
+        
         locationStack = StackPush(locationStack, locationList[i]);
     }
     //Closes the file and frees the line
@@ -208,8 +273,8 @@ Stack *readFile(char *fileName) {
     return locationStack;
 } 
 
-Location *LocationInit() {
-    Stack *locationStack = readFile("world.txt");
+Location *LocationInit(Game* game) {
+    Stack *locationStack = readFile(game, "world.txt");
     return StackHead(locationStack);
 }
 

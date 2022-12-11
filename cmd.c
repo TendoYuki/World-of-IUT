@@ -1,5 +1,6 @@
 #include "cmd.h"
 #include "mobile.h" /* Mobile type for player management */
+#include "object.h"
 #include "exits.h" /* getDir and DIRECTION type */
 #include <string.h> /* strtok, strlen */
 #include <strings.h> /* strcasecmp */
@@ -25,6 +26,9 @@ void cmdHelp()
         "                south, west, up, and down.\n"
         "- go <dir>:     to go in the given direction.\n"
         "- exits:        to see all the possible exits of your current place\n"
+        "- get <object>: to take an object on the current location\n"
+        "- drop <object>:to drop an object you have on the current location\n"
+        "- inventory:    to look a your inventory ( all the objects you have )\n"
     );
 }
 
@@ -52,10 +56,24 @@ void cmdLook(Game *game, char *args)
     Mobile *player=game->player;
     if (!strcasecmp(args,"me")) MobilePrint(player);
     else if (!strcasecmp(args,"around"))
-        printf("You look around. You see\n%s\n", game->player->location->desc);
+        printf("You look around.\n%s\n", game->player->location->desc);
+    else if (!strcasecmp(args,"objects")) {
+        printf("You look for objects.\n");
+        bool objectPresent = false;
+        for(int i = 0 ; i < 6 ; i++) {
+            if (game->player->location->objects[i]) {
+                printf("You see a %s, %s\n", game->player->location->objects[i]->name, game->player->location->objects[i]->desc);
+                objectPresent = true;
+            }
+        }
+        if(!objectPresent) printf("You understand that there is nothing there\n");
+    }
     else {
         Direction dir=strtodir(args);
-        if (dir == WRONGDIR) printf("You cannot look %s\n",args);
+        if (dir == WRONGDIR) {
+            printf("You cannot look %s\n",args);
+            return;
+        }
         if (game->player->location->directions[dir]) printf("You look %s. You see %s\n",args, game->player->location->directions[dir]->name);
         else printf("You look %s. Nothing's there\n",args);
     }
@@ -81,11 +99,71 @@ void cmdGo(Game *game,char *args)
     Direction dir=strtodir(args);
     if (dir == WRONGDIR) printf("You cannot go %s\n",args);
     else {
+        if(!game->player->location->directions[dir]) {
+            printf("You cannot go %s, there's nothing there\n",args);
+            return;
+        }
         MobileMove(game->player, game->player->location->directions[dir]);
         LocationPrint(game->player->location);
+    
+        //Easter Egg
+        if (strcmp(game->player->location->name,"Living Room") == 0) {
+            for(int i = 0 ; i<6; i++) {
+                if(game->player->inventory[i] && strcmp(game->player->inventory[i]->name, "Knife") == 0) {
+                    printf("Unfortunately, you slipped on a banana peel, and fell,\nThe knife you took with you, accidentaly sliced your throat open.\nAlthough you were in the living roomn you died ! What a looser !\n");
+                    cmdQuit(game);
+                }
+
+            }
+        }
     }
 }
 
+
+void cmdInventory(Game *game){
+    for (int i=0;i<6;i++){
+        if(game->player->inventory[i]) printf("You have %s\n",game->player->inventory[i]->name);
+    }
+}
+
+void cmdGet(Game *game,char *args){
+    if (!args || strlen(args)==0) 
+    {
+        printf("You must provide an object to take (cf 'Help')\n");
+        return;
+    }
+    for(int i = 0; i<6;i++){
+        if(game->player->location->objects[i] != NULL && strcmp(game->player->location->objects[i]->name,args)==0){
+            AddObjectToInventory(game->player, game->player->location->objects[i]);
+            game->player->location->objects[i] = NULL;
+            return;
+        }
+    }
+    printf("This object isn't here\n");
+}
+
+void cmdDrop(Game *game,char *args){
+    if (!args || strlen(args)==0) 
+    {
+        printf("You must provide an object to drop (cf 'Help')\n");
+        return;
+    }
+    for(int i = 0; i<6;i++){
+        if(game->player->inventory[i] && !strcmp(game->player->inventory[i] ->name,args)){
+            for(int j=0;j<6;j++){
+                if(!game->player->location->objects[j]){
+                    game->player->location->objects[j]= game->player->inventory[i];
+                    game->player->inventory[i] = NULL;
+                    printf("You dropped %s\n", args);
+                    return;
+                }
+            }
+            printf("There's no more place in this room\n");
+            return;
+        }
+    }
+    printf("You don't have this object\n");
+}
 
 /* 
     read a line from standard input and return it. 
@@ -118,6 +196,9 @@ void parseAndExecute(char *line, Game *game)
             else if (!strcasecmp(name,"look")) cmdLook(game,args); /* cmd=="look" -> call cmdLook(). args specify where/what to look. game contains the necessary info about stuff to look at */
             else if (!strcasecmp(name,"go")) cmdGo(game,args); /* cmd="go" -> call cmdGo(). args specify where to go. game contains info about locations and will update the player's location */
             else if (!strcasecmp(name,"exits")) cmdLookExits(game);
+            else if (!strcasecmp(name,"get")) cmdGet(game,args);
+            else if (!strcasecmp(name,"drop")) cmdDrop(game,args);
+            else if (!strcasecmp(name,"inventory")) cmdInventory(game);
             else printf("Command not found. Try 'help'\n");
         }
         else printf("Command not found. Try 'help'\n");

@@ -35,7 +35,7 @@ void LocationPrintShort(Location *location);
 /**
  * Creates and allocates all locations available, returns the first location
 */
-Location *LocationInit();
+Location *LocationInit(Game *game);
 
 /**
  * Destroys and deallocates all locations available

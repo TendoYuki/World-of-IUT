@@ -1,6 +1,6 @@
 #ifndef MOBILE_H
 #define MOBILE_H
-#include "location.h"
+#include "types.h"
 
 extern Mobile *MobileNew(char *name, char *desc);
 extern Mobile *MobileDelete(Mobile *m);
