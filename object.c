@@ -29,7 +29,7 @@ bool AddObjectToInventory(Mobile *player, Object *object) {
     for(int j=0;j<6;j++){
         if(!player->inventory[j]){
             player->inventory[j] = object;
-            printf("You received %s\n", player->inventory[j]->name);
+            printf("You received a %s\n", player->inventory[j]->name);
             return true;
         }
     }

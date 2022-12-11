@@ -67,3 +67,27 @@ An old blackberry one !
 Old_Clothes
 8
 Looks like it belonged to an old person.
+@object 6
+Left_twix
+-1
+Hmm yummy, i'll save it for later, it's not like i'm going to die anyways...
+@object 7
+bread
+-1
+Yummy
+@object 8
+Phone
+-1
+Oh my phone !
+@object 9
+torchlight
+-1
+cool
+@object 10
+Rock
+1
+nothing special
+@object 11
+Leaf
+1
+nothing special
