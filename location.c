@@ -174,7 +174,7 @@ Stack *readFile(Game* game, char *fileName) {
                 case 2:
                     //If there is no description, allocates memory for the description of size equal to the size of the line
                     if(!objectList[objectCount-1]->desc) {
-                        objectList[objectCount-1]->desc = strdup(line);
+                        objectList[objectCount-1]->desc = strndup(line, strlen(line) - 1);
                     }
 
                     /*
@@ -220,7 +220,7 @@ Stack *readFile(Game* game, char *fileName) {
                 default:
                     //If there is no description, allocates memory for the description of size equal to the size of the line
                     if(!locationList[locationCount-1]->desc) {
-                        locationList[locationCount-1]->desc = strdup(line);
+                        locationList[locationCount-1]->desc = strndup(line, strlen(line) - 1);
                     }
 
                     /*
@@ -237,7 +237,7 @@ Stack *readFile(Game* game, char *fileName) {
                         strcpy(cpy, locationList[locationCount-1]->desc);
                         strcat(cpy, line);
                         free(locationList[locationCount-1]->desc);
-                        locationList[locationCount-1]->desc = strdup(cpy);
+                        locationList[locationCount-1]->desc = strndup(cpy, strlen(cpy) - 1);
                         free(cpy);
                     }
                     break;
