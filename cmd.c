@@ -116,6 +116,14 @@ void cmdGo(Game *game,char *args)
 
             }
         }
+        if (strcmp(game->player->location->name,"Attic")==0){
+            for(int i=0;i<6;i++){
+                if(game->player->inventory[i] && strcmp(game->player->inventory[i]->name, "Bread") == 0) {
+                    printf("Unfortunately, you had bread on you and some starving rats just attacked you\nAnd you died from a rare desease\nMaybe you will be luckier in your next life\n");
+                    cmdQuit(game);
+                }
+            }
+        }
     }
 }
 
