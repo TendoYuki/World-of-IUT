@@ -8,7 +8,11 @@ void Intro()
            "Be prepared because you are about to live extraordinary, frightful, yet exciting\n"
            "adventures...\n" 
            "If you're new to the game, you can start by typing 'help'\n" 
-           "Farewell, and may the spirit of the Vosges be with you!\n");
+           "You just woke up in the middle of a long road, next to a big mansion\n"
+           "You don't remember anything from before\n"
+           "Maybe you should check what you have in your inventory, it might be useful\n"
+           "Farewell, and may the spirit of the Vosges be with you!\n"
+           );
 }
 
 

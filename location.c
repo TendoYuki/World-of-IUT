@@ -249,7 +249,12 @@ Stack *readFile(Game* game, char *fileName) {
     Stack *locationStack;
     for (int j = 0; j < objectCount ; j++) {
         if(objectLinks[j][0] == -1) {
-            AddObjectToInventory(game->player, objectList[j]);
+            for(int k=0;k<6;k++){ // Adds objects to player inventory 
+                if(!game->player->inventory[k]){
+                    game->player->inventory[k] = objectList[j];
+                    break;
+                }
+            }
         }
         else {
             for(int i = 0; i < max_object_per_room ; i++) {
