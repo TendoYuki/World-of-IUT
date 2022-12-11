@@ -64,6 +64,26 @@ Phone
 9
 An old blackberry one !
 @object 5
-Old Clothes
+Old clothes
 8
 Looks like it belonged to an old person.
+@object 6
+Left twix
+-1
+Hmm yummy, i'll save it for later, it's not like i'm going to die anyways...
+@object 7
+Bread
+-1
+Yummy
+@object 8
+Smartphone
+-1
+Oh my phone !
+@object 9
+Flashlight
+-1
+Can be useful if it gets too dark.
+@object 10
+Rock
+1
+Its my pet rock !

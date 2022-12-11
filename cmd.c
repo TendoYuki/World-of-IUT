@@ -122,7 +122,7 @@ void cmdGo(Game *game,char *args)
 
 void cmdInventory(Game *game){
     for (int i=0;i<6;i++){
-        if(game->player->inventory[i]) printf("You have %s\n",game->player->inventory[i]->name);
+        if(game->player->inventory[i]) printf("You have a %s\n",game->player->inventory[i]->name);
     }
 }
 
@@ -134,8 +134,7 @@ void cmdGet(Game *game,char *args){
     }
     for(int i = 0; i<6;i++){
         if(game->player->location->objects[i] != NULL && strcmp(game->player->location->objects[i]->name,args)==0){
-            AddObjectToInventory(game->player, game->player->location->objects[i]);
-            game->player->location->objects[i] = NULL;
+            if (AddObjectToInventory(game->player, game->player->location->objects[i])) game->player->location->objects[i] = NULL;
             return;
         }
     }
@@ -154,7 +153,7 @@ void cmdDrop(Game *game,char *args){
                 if(!game->player->location->objects[j]){
                     game->player->location->objects[j]= game->player->inventory[i];
                     game->player->inventory[i] = NULL;
-                    printf("You dropped %s\n", args);
+                    printf("You dropped a %s\n", args);
                     return;
                 }
             }
