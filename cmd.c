@@ -107,18 +107,18 @@ void cmdGo(Game *game,char *args)
         LocationPrint(game->player->location);
     
         //Easter Egg
-        if (strcmp(game->player->location->name,"Living Room") == 0) {
+        if (strcasecmp(game->player->location->name,"Living Room") == 0) {
             for(int i = 0 ; i<6; i++) {
-                if(game->player->inventory[i] && strcmp(game->player->inventory[i]->name, "Knife") == 0) {
+                if(game->player->inventory[i] && strcasecmp(game->player->inventory[i]->name, "Knife") == 0) {
                     printf("Unfortunately, you slipped on a banana peel, and fell,\nThe knife you took with you, accidentaly sliced your throat open.\nAlthough you were in the living roomn you died ! What a looser !\n");
                     cmdQuit(game);
                 }
 
             }
         }
-        if (strcmp(game->player->location->name,"Attic")==0){
+        if (strcasecmp(game->player->location->name,"Attic")==0){
             for(int i=0;i<6;i++){
-                if(game->player->inventory[i] && strcmp(game->player->inventory[i]->name, "Bread") == 0) {
+                if(game->player->inventory[i] && strcasecmp(game->player->inventory[i]->name, "Bread") == 0) {
                     printf("Unfortunately, you had bread on you and some starving rats just attacked you\nAnd you died from a rare desease\nMaybe you will be luckier in your next life\n");
                     cmdQuit(game);
                 }
@@ -146,7 +146,7 @@ void cmdGet(Game *game,char *args){
         return;
     }
     for(int i = 0; i<6;i++){
-        if(game->player->location->objects[i] != NULL && strcmp(game->player->location->objects[i]->name,args)==0){
+        if(game->player->location->objects[i] != NULL && strcasecmp(game->player->location->objects[i]->name,args)==0){
             if (AddObjectToInventory(game->player, game->player->location->objects[i])) game->player->location->objects[i] = NULL;
             return;
         }
@@ -161,12 +161,12 @@ void cmdDrop(Game *game,char *args){
         return;
     }
     for(int i = 0; i<6;i++){
-        if(game->player->inventory[i] && !strcmp(game->player->inventory[i] ->name,args)){
+        if(game->player->inventory[i] && !strcasecmp(game->player->inventory[i] ->name,args)){
             for(int j=0;j<6;j++){
                 if(!game->player->location->objects[j]){
                     game->player->location->objects[j]= game->player->inventory[i];
                     game->player->inventory[i] = NULL;
-                    printf("You dropped a %s\n", args);
+                    printf("You dropped a %s\n", game->player->location->objects[j]->name);
                     return;
                 }
             }

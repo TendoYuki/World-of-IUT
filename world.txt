@@ -72,7 +72,7 @@ Left twix
 -1
 Hmm yummy, i'll save it for later, it's not like i'm going to die anyways...
 @object 7
-Bread
+Bread Loaf
 -1
 Yummy
 @object 8
