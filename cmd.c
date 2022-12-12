@@ -56,7 +56,7 @@ void cmdLook(Game *game, char *args)
     Mobile *player=game->player;
     if (!strcasecmp(args,"me")) MobilePrint(player);
     else if (!strcasecmp(args,"around"))
-        printf("You look around.\n%s\n", game->player->location->desc);
+        printf("%s\n%s\n",game->player->location->name ,game->player->location->desc);
     else if (!strcasecmp(args,"objects")) {
         printf("You look for objects.\n");
         bool objectPresent = false;
@@ -129,9 +129,14 @@ void cmdGo(Game *game,char *args)
 
 
 void cmdInventory(Game *game){
+    bool hasItem = false;
     for (int i=0;i<6;i++){
-        if(game->player->inventory[i]) printf("You have a %s\n",game->player->inventory[i]->name);
+        if(game->player->inventory[i]) {
+            printf("You have a %s\n",game->player->inventory[i]->name);
+            hasItem = true;
+        }
     }
+    if(!hasItem) printf("You have nothing in your inventory\n");
 }
 
 void cmdGet(Game *game,char *args){

@@ -4,12 +4,12 @@ The Road
 You are at the middle of a long road.
 @room 2
 The Road
--1 -1 1 -1 -1 -1
-You are at the end of a long road, something is blocking your path but you are too dumb to get over it.
+2 -1 1 -1 -1 -1
+You are at the end of a long road, something is blocking your path but you aren't smart enough to get over it.
 @room 3
 The Road
-1 -1 -1 -1 -1 -1
-You are at the end of a long road, something is blocking your path but you are too dumb to get over it.
+1 -1 3 -1 -1 -1
+You are at the end of a long road, something is blocking your path but you aren't smart enough to get over it.
 @room 4
 The Frontyard
 -1 1 -1 5 -1 -1
