@@ -25,16 +25,30 @@ void ObjectDelete(Object *object) {
     }
 }
 
-bool AddObjectToInventory(Mobile *player, Object *object) {
+int AddObjectToInventory(Mobile *player, Object *object) {
+    if(!player || !object) return -1;
+    int objectIndexInLocation = -1;
     for(int j=0;j<6;j++){
         if(!player->inventory[j]){
             player->inventory[j] = object;
-            printf("You received a %s\n", player->inventory[j]->name);
-            return true;
+            objectIndexInLocation = j;
+            break;
         }
     }
-    printf("There's no more place in your inventory\n");
-    return false;
+    return objectIndexInLocation;
+}
+
+int AddObjectToLocation(Location *location, Object *object) {
+    if(!location || !object) return -1;
+    int objectIndexInLocation = -1;
+    for(int j=0;j<6;j++){
+        if(!location->objects[j]){
+            location->objects[j]= object;
+            objectIndexInLocation = j;
+            break;
+        }
+    }
+    return objectIndexInLocation;
 }
 
 int ObjectIsInPlayerInventory(Mobile *player, char *objectName) {

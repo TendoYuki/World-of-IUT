@@ -256,19 +256,10 @@ Stack *readFile(Game* game, char *fileName) {
         objectList[j]->desc = strndup(temp, strlen(temp) - 1);
         free(temp);
         if(objectLinks[j][0] == -1) {
-            for(int k=0;k<6;k++){ // Adds objects to player inventory 
-                if(!game->player->inventory[k]){
-                    game->player->inventory[k] = objectList[j];
-                    break;
-                }
-            }
+            AddObjectToInventory(game->player, objectList[j]);
         }
         else {
-            for(int i = 0; i < max_object_per_room ; i++) {
-                if(locationList[objectLinks[j][0]-1]->objects[i] != NULL) continue;
-                locationList[objectLinks[j][0]-1]->objects[i] = objectList[j];
-                break;
-            }
+            AddObjectToLocation(locationList[objectLinks[j][0]-1], objectList[j]);
         }
     }
     for (int i = locationCount-1; i >= 0 ; i--) {

@@ -107,15 +107,15 @@ void cmdGo(Game *game,char *args)
         LocationPrint(game->player->location);
     
         //Easter Egg
-        if (strcasecmp(game->player->location->name,"Living Room") == 0) {
+        if (!strcasecmp(game->player->location->name,"Living Room")) {
             if(ObjectIsInPlayerInventory(game->player, "knife") != -1) {
                 printf("Unfortunately, you slipped on a banana peel, and fell,\nThe knife you took with you, accidentaly sliced your throat open.\nAlthough you were in the living roomn you died ! What a looser !\n");
                 cmdQuit(game);
             }
         }
-        if (strcasecmp(game->player->location->name,"Attic")==0){
+        if (!strcasecmp(game->player->location->name,"Attic")){
             if(ObjectIsInPlayerInventory(game->player, "bread loaf") != -1) {
-                printf("Unfortunately, you had bread on you and some starving rats just attacked you\nAnd you died from a rare desease\nMaybe you will be luckier in your next life\n");
+                printf("Unfortunately, you had bread on you and some starving rats just attacked you\nAnd you died from a rare disease\nMaybe you will be luckier in your next life\n");
                 cmdQuit(game);
             }
         }
@@ -142,10 +142,14 @@ void cmdGet(Game *game,char *args){
     }
     int indexInLocation = ObjectIsInLocation(game->player->location, args);
     if(indexInLocation!=-1) {
-        if (AddObjectToInventory(game->player, game->player->location->objects[indexInLocation])) game->player->location->objects[indexInLocation] = NULL;
-        return;
+        int indexInInventory = AddObjectToInventory(game->player, game->player->location->objects[indexInLocation]);
+        if (indexInInventory != -1) {
+            game->player->location->objects[indexInLocation] = NULL;
+            printf("You received a %s\n", game->player->inventory[indexInInventory]->name);
+        }
+        else printf("There's no more place in your inventory\n");
     }
-    printf("This object isn't here\n");
+    else printf("This object isn't here\n");
 }
 
 void cmdDrop(Game *game,char *args){
@@ -156,18 +160,14 @@ void cmdDrop(Game *game,char *args){
     }
     int indexPlayerInventory = ObjectIsInPlayerInventory(game->player, args);
     if(indexPlayerInventory != -1) {
-        for(int j=0;j<6;j++){
-            if(!game->player->location->objects[j]){
-                game->player->location->objects[j]= game->player->inventory[indexPlayerInventory];
-                game->player->inventory[indexPlayerInventory] = NULL;
-                printf("You dropped a %s\n", game->player->location->objects[j]->name);
-                return;
-            }
+        int indexLocation = AddObjectToLocation(game->player->location, game->player->inventory[indexPlayerInventory]);    
+        if(indexLocation != -1) {
+            game->player->inventory[indexPlayerInventory] = NULL;
+            printf("You dropped a %s\n", game->player->location->objects[indexLocation]->name);
         }
-        printf("There's no more place in this room\n");
-        return;
+        else printf("There's no more place in this room\n");
     }
-    printf("You don't have this object\n");
+    else printf("You don't have this object\n");
 }
 
 /* 
@@ -198,24 +198,30 @@ void parseAndExecute(char *line, Game *game)
             char *args=strtok(NULL,sep); /* extract the second word = argument. The rest of the line is disregarded */
             /* call the appropriate function, depending on the command */
             if (!strcasecmp(name,"help")) cmdHelp(); /* cmd=="help" -> call cmdHelp() */
-            else if (!strcasecmp(name,"quit")) cmdQuit(game); /* cmd=="quit" -> call cmdQuit(). Also properly shuts the game down */
+            else if (!strcasecmp(name,"quit")) {
+                if(lineCpy) free(lineCpy);
+                cmdQuit(game); /* cmd=="quit" -> call cmdQuit(). Also properly shuts the game down */
+            }
             else if (!strcasecmp(name,"look")) cmdLook(game,args); /* cmd=="look" -> call cmdLook(). args specify where/what to look. game contains the necessary info about stuff to look at */
             else if (!strcasecmp(name,"go")) cmdGo(game,args); /* cmd="go" -> call cmdGo(). args specify where to go. game contains info about locations and will update the player's location */
             else if (!strcasecmp(name,"exits")) cmdLookExits(game);
             else if (!strcasecmp(name,"get")) {
                 char *unparesdArgs = strndup(strchr(lineCpy, ' ') + 1, strlen(strchr(lineCpy, ' ') + 1) - 1); // Manipluation necessary to get argument with spaces
-                cmdGet(game,unparesdArgs);
-                free(unparesdArgs);
-                free(lineCpy);
+                if(unparesdArgs) {
+                    cmdGet(game,unparesdArgs);
+                    free(unparesdArgs);
+                }
             } 
             else if (!strcasecmp(name,"drop")) {
                 char *unparesdArgs = strndup(strchr(lineCpy, ' ') + 1, strlen(strchr(lineCpy, ' ') + 1) - 1); // Manipluation necessary to get argument with spaces
-                cmdDrop(game,unparesdArgs);
-                free(unparesdArgs);
-                free(lineCpy);
+                 if(unparesdArgs) {
+                    cmdDrop(game,unparesdArgs);
+                    free(unparesdArgs);
+                }
             }
             else if (!strcasecmp(name,"inventory")) cmdInventory(game);
             else printf("Command not found. Try 'help'\n");
+            if(lineCpy) free(lineCpy);
         }
         else printf("Command not found. Try 'help'\n");
     }
