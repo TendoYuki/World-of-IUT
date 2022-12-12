@@ -123,6 +123,8 @@ Stack *readFile(Game* game, char *fileName) {
 
             locationList[locationCount-1]->desc = NULL;
             locationList[locationCount-1]->name = NULL;
+
+            for (int i = 0; i < possible_directions; i++) locationList[locationCount-1]->directions[i] = NULL;
             locationLinks = realloc(locationLinks, sizeof(int*) * locationCount);
 
             locationLinks[locationCount-1] = malloc(sizeof(int) * possible_directions);

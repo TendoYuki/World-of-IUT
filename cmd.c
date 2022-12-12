@@ -108,20 +108,15 @@ void cmdGo(Game *game,char *args)
     
         //Easter Egg
         if (strcasecmp(game->player->location->name,"Living Room") == 0) {
-            for(int i = 0 ; i<6; i++) {
-                if(game->player->inventory[i] && strcasecmp(game->player->inventory[i]->name, "Knife") == 0) {
-                    printf("Unfortunately, you slipped on a banana peel, and fell,\nThe knife you took with you, accidentaly sliced your throat open.\nAlthough you were in the living roomn you died ! What a looser !\n");
-                    cmdQuit(game);
-                }
-
+            if(ObjectIsInPlayerInventory(game->player, "knife") != -1) {
+                printf("Unfortunately, you slipped on a banana peel, and fell,\nThe knife you took with you, accidentaly sliced your throat open.\nAlthough you were in the living roomn you died ! What a looser !\n");
+                cmdQuit(game);
             }
         }
         if (strcasecmp(game->player->location->name,"Attic")==0){
-            for(int i=0;i<6;i++){
-                if(game->player->inventory[i] && strcasecmp(game->player->inventory[i]->name, "Bread") == 0) {
-                    printf("Unfortunately, you had bread on you and some starving rats just attacked you\nAnd you died from a rare desease\nMaybe you will be luckier in your next life\n");
-                    cmdQuit(game);
-                }
+            if(ObjectIsInPlayerInventory(game->player, "bread loaf") != -1) {
+                printf("Unfortunately, you had bread on you and some starving rats just attacked you\nAnd you died from a rare desease\nMaybe you will be luckier in your next life\n");
+                cmdQuit(game);
             }
         }
     }
@@ -145,11 +140,10 @@ void cmdGet(Game *game,char *args){
         printf("You must provide an object to take (cf 'Help')\n");
         return;
     }
-    for(int i = 0; i<6;i++){
-        if(game->player->location->objects[i] != NULL && strcasecmp(game->player->location->objects[i]->name,args)==0){
-            if (AddObjectToInventory(game->player, game->player->location->objects[i])) game->player->location->objects[i] = NULL;
-            return;
-        }
+    int indexInLocation = ObjectIsInLocation(game->player->location, args);
+    if(indexInLocation!=-1) {
+        if (AddObjectToInventory(game->player, game->player->location->objects[indexInLocation])) game->player->location->objects[indexInLocation] = NULL;
+        return;
     }
     printf("This object isn't here\n");
 }
@@ -160,19 +154,18 @@ void cmdDrop(Game *game,char *args){
         printf("You must provide an object to drop (cf 'Help')\n");
         return;
     }
-    for(int i = 0; i<6;i++){
-        if(game->player->inventory[i] && !strcasecmp(game->player->inventory[i] ->name,args)){
-            for(int j=0;j<6;j++){
-                if(!game->player->location->objects[j]){
-                    game->player->location->objects[j]= game->player->inventory[i];
-                    game->player->inventory[i] = NULL;
-                    printf("You dropped a %s\n", game->player->location->objects[j]->name);
-                    return;
-                }
+    int indexPlayerInventory = ObjectIsInPlayerInventory(game->player, args);
+    if(indexPlayerInventory != -1) {
+        for(int j=0;j<6;j++){
+            if(!game->player->location->objects[j]){
+                game->player->location->objects[j]= game->player->inventory[indexPlayerInventory];
+                game->player->inventory[indexPlayerInventory] = NULL;
+                printf("You dropped a %s\n", game->player->location->objects[j]->name);
+                return;
             }
-            printf("There's no more place in this room\n");
-            return;
         }
+        printf("There's no more place in this room\n");
+        return;
     }
     printf("You don't have this object\n");
 }

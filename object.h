@@ -21,4 +21,15 @@ void ObjectDelete(Object *object);
 */
 bool AddObjectToInventory(Mobile *player, Object *object);
 
+
+/**
+ * Checks if the object determined by its name is stored in the player's inventory, if it exists returns its index else if it isn't return -1
+*/
+int ObjectIsInPlayerInventory(Mobile* player, char *objectName);
+
+/**
+ * Checks if the object determined by its name is stored in the location if it exists returns its index else if it isn't return -1
+*/
+int ObjectIsInLocation(Location *location, char *objectName);
+
 #endif
