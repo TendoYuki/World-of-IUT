@@ -64,7 +64,7 @@ Phone
 9
 An old blackberry one !
 @object 5
-Old clothes
+Old coat
 8
 Looks like it belonged to an old person.
 @object 6
