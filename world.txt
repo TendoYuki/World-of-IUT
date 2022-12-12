@@ -86,4 +86,4 @@ Can be useful if it gets too dark.
 @object 10
 Rock
 1
-Its my pet rock !
+I could make a pet out of it ! I want a pet rock !

@@ -62,7 +62,7 @@ void cmdLook(Game *game, char *args)
         bool objectPresent = false;
         for(int i = 0 ; i < 6 ; i++) {
             if (game->player->location->objects[i]) {
-                printf("You see a %s, %s\n", game->player->location->objects[i]->name, game->player->location->objects[i]->desc);
+                printf("%s, %s\n", game->player->location->objects[i]->name, game->player->location->objects[i]->desc);
                 objectPresent = true;
             }
         }
