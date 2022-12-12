@@ -173,10 +173,10 @@ Stack *readFile(Game* game, char *fileName) {
                     objectLinks[objectCount-1][0] = atoi(line);
                     break;
                 // If its the Description Line
-                case 2:
+                default:
                     //If there is no description, allocates memory for the description of size equal to the size of the line
                     if(!objectList[objectCount-1]->desc) {
-                        objectList[objectCount-1]->desc = strndup(line, strlen(line) - 1);
+                        objectList[objectCount-1]->desc = strndup(line, strlen(line));
                     }
 
                     /*
@@ -193,7 +193,7 @@ Stack *readFile(Game* game, char *fileName) {
                         strcpy(cpy, objectList[objectCount-1]->desc);
                         strcat(cpy, line);
                         free(objectList[objectCount-1]->desc);
-                        objectList[objectCount-1]->desc = strndup(cpy, strlen(cpy) - 1);
+                        objectList[objectCount-1]->desc = strndup(cpy, strlen(cpy));
                         free(cpy);
                     }
                     break;
@@ -222,7 +222,7 @@ Stack *readFile(Game* game, char *fileName) {
                 default:
                     //If there is no description, allocates memory for the description of size equal to the size of the line
                     if(!locationList[locationCount-1]->desc) {
-                        locationList[locationCount-1]->desc = strndup(line, strlen(line) - 1);
+                        locationList[locationCount-1]->desc = strndup(line, strlen(line));
                     }
 
                     /*
@@ -239,7 +239,7 @@ Stack *readFile(Game* game, char *fileName) {
                         strcpy(cpy, locationList[locationCount-1]->desc);
                         strcat(cpy, line);
                         free(locationList[locationCount-1]->desc);
-                        locationList[locationCount-1]->desc = strndup(cpy, strlen(cpy) - 1);
+                        locationList[locationCount-1]->desc = strndup(cpy, strlen(cpy));
                         free(cpy);
                     }
                     break;
@@ -250,6 +250,11 @@ Stack *readFile(Game* game, char *fileName) {
 
     Stack *locationStack;
     for (int j = 0; j < objectCount ; j++) {
+        char *temp = malloc((sizeof(char*) * strlen(objectList[j]->desc)+(sizeof(char*))));
+        strcpy(temp, objectList[j]->desc);
+        free(objectList[j]->desc);
+        objectList[j]->desc = strndup(temp, strlen(temp) - 1);
+        free(temp);
         if(objectLinks[j][0] == -1) {
             for(int k=0;k<6;k++){ // Adds objects to player inventory 
                 if(!game->player->inventory[k]){
@@ -267,6 +272,11 @@ Stack *readFile(Game* game, char *fileName) {
         }
     }
     for (int i = locationCount-1; i >= 0 ; i--) {
+        char *temp = malloc((sizeof(char*) * strlen(locationList[i]->desc)+(sizeof(char*))));
+        strcpy(temp, locationList[i]->desc);
+        free(locationList[i]->desc);
+        locationList[i]->desc = strndup(temp, strlen(temp) - 1);
+        free(temp);
         for (int j = 0; j < possible_directions ; j++) {
             if(locationLinks[i][j] == -1) continue;
             LocationSetExit(locationList[i], j, locationList[locationLinks[i][j]-1]);
