@@ -4,16 +4,15 @@
 #include <string.h>
 #include <stdio.h>
 
-Object *ObjectNew(char *name) {
+Object *ObjectNew(char *name, char *desc) {
     Object *object = (Object*)NULL;
-    if (name)
-    {   
-        object = malloc(sizeof(Object));
-        if (object) 
-        {
-            object->name=strdup(name);
-        }
-    }
+
+    object = malloc(sizeof(Object));
+    if (!object) return NULL; 
+
+    object->name= name ? strdup(name) : NULL;
+    object->desc= desc ? strdup(desc) : NULL;
+
     return object;
 }
 

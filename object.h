@@ -8,7 +8,7 @@
  * -1 == Object on the player
  * 0..12 == Object on a location
 */
-Object *ObjectNew(char *name);
+Object *ObjectNew(char *name, char *desc);
 
 /**
  * Deletes and deallocates an object

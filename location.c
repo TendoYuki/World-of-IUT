@@ -6,23 +6,23 @@
 #include "stack.h"
 #include "object.h"
 
+const int MAX_OBJECT_PER_ROOM = 6;
+const int DIRECTION_COUNT = 6;
+
 Location *LocationNew(char *name, char *desc) {
-    Location *location;
-    if (name && desc)
-    {
-        location=malloc(sizeof(Location));
-        if(!location) return NULL;
+    Location *location = malloc(sizeof(Location));
+    if(!location) return NULL;
 
-        location->directions = malloc(sizeof(Location*) * 6);
-        if(!location->directions) return NULL;
+    location->directions = malloc(sizeof(Location*) * DIRECTION_COUNT);
+    if(!location->directions) return NULL;
+    for (int i = 0; i < DIRECTION_COUNT; i++) location->directions[i] = NULL;
+    
+    location->objects = malloc(sizeof(Object*) * MAX_OBJECT_PER_ROOM);
+    if(!location->objects) return NULL;
+    for (int i = 0; i < MAX_OBJECT_PER_ROOM; i++) location->objects[i] = NULL;
 
-        for (int i = 0; i < 6 ; i++) {
-            location->directions[i] = NULL;
-        }
-
-        location->name=strdup(name);
-        location->desc=strdup(desc);
-    }
+    location->name = name ? strdup(name) : NULL;
+    location->desc = desc ? strdup(desc) : NULL;
     return location;
 }
 
@@ -116,17 +116,9 @@ Stack *readFile(Game* game, char *fileName) {
         if (strstr(line, "@room") != NULL) {
             locationCount++;
             locationList = realloc(locationList, sizeof(Location*) * locationCount);
-            locationList[locationCount-1] = malloc(sizeof(Location));
-            locationList[locationCount-1]->objects = malloc(sizeof(Object*) * max_object_per_room);
-            for (int i = 0; i < max_object_per_room; i++) locationList[locationCount-1]->objects[i] = NULL;
-            locationList[locationCount-1]->directions = malloc(sizeof(Location*) * possible_directions);
-
-            locationList[locationCount-1]->desc = NULL;
-            locationList[locationCount-1]->name = NULL;
-
-            for (int i = 0; i < possible_directions; i++) locationList[locationCount-1]->directions[i] = NULL;
+            locationList[locationCount-1] = LocationNew(NULL, NULL);
+            
             locationLinks = realloc(locationLinks, sizeof(int*) * locationCount);
-
             locationLinks[locationCount-1] = malloc(sizeof(int) * possible_directions);
 
             subIndex=0;
@@ -142,15 +134,11 @@ Stack *readFile(Game* game, char *fileName) {
         else if (strstr(line, "@object") != NULL) {
             objectCount++;
             objectList = realloc(objectList, sizeof(Object*) * objectCount);
-            objectList[objectCount-1] = malloc(sizeof(Object));
+            objectList[objectCount-1] = ObjectNew(NULL, NULL);
 
             objectLinks = realloc(objectLinks, sizeof(int*) * objectCount);
-
             objectLinks[objectCount-1] = malloc(sizeof(int));
-
-            objectList[objectCount-1]->desc = NULL;
-            objectList[objectCount-1]->name = NULL;
-
+            
             subIndex=0;
             readingObject = true;
             readingRoom = false;
@@ -250,11 +238,14 @@ Stack *readFile(Game* game, char *fileName) {
 
     Stack *locationStack;
     for (int j = 0; j < objectCount ; j++) {
+        //Removes the /n at the end of the description of the current object
         char *temp = malloc((sizeof(char*) * strlen(objectList[j]->desc)+(sizeof(char*))));
         strcpy(temp, objectList[j]->desc);
         free(objectList[j]->desc);
         objectList[j]->desc = strndup(temp, strlen(temp) - 1);
         free(temp);
+
+        // Either adds the object to the player's invetory or to its assigned room
         if(objectLinks[j][0] == -1) {
             AddObjectToInventory(game->player, objectList[j]);
         }
@@ -263,11 +254,14 @@ Stack *readFile(Game* game, char *fileName) {
         }
     }
     for (int i = locationCount-1; i >= 0 ; i--) {
+        //Removes the /n at the end of the description of the current location
         char *temp = malloc((sizeof(char*) * strlen(locationList[i]->desc)+(sizeof(char*))));
         strcpy(temp, locationList[i]->desc);
         free(locationList[i]->desc);
         locationList[i]->desc = strndup(temp, strlen(temp) - 1);
         free(temp);
+
+        //Binds the exits of a location to others in accordance to the location links list
         for (int j = 0; j < possible_directions ; j++) {
             if(locationLinks[i][j] == -1) continue;
             LocationSetExit(locationList[i], j, locationList[locationLinks[i][j]-1]);

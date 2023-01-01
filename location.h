@@ -4,12 +4,8 @@
 #include "exits.h"
 #include "types.h"
 
-/**
- * Location type having a name and a desctiption
- * Property Direction
- * 4 -> up
- * 5 -> down
-*/
+extern const int MAX_OBJECT_PER_ROOM;
+extern const int DIRECTION_COUNT;
 
 
 /**
