@@ -272,6 +272,23 @@ Stack *readFile(Game* game, char *fileName) {
     //Closes the file and frees the line
     fclose(file);
     if (line) free(line);
+    if (locationList) free(locationList);
+    if (objectList) free(objectList);
+    if (locationLinks) {
+        for (size_t i = 0; i < locationCount; i++)
+        {
+            if (locationLinks[i]) free(locationLinks[i]);
+        }
+        
+        free(locationLinks);
+    }
+    if (objectLinks) {for (size_t i = 0; i < objectCount; i++)
+        {
+            if (objectLinks[i]) free(objectLinks[i]);
+        }
+        free(objectLinks);
+    }
+    
     return locationStack;
 } 
 
