@@ -164,25 +164,11 @@ Stack *readFile(Game* game, char *fileName) {
                 default:
                     //If there is no description, allocates memory for the description of size equal to the size of the line
                     if(!objectList[objectCount-1]->desc) {
-                        objectList[objectCount-1]->desc = strndup(line, strlen(line));
+                        objectList[objectCount-1]->desc = strdup(line);
                     }
-
-                    /*
-                    If there is already a description, meaning that we are reading a multi line description
-                    We are going to create a variable cpy of the size of the already stored description to which will be added the size of the current line
-                    We are then going to copy the already stored description in the cpy variable And concatenate it with the current line
-                    Then we are going to reallocate the already stored description to its size plus the size of the current line  
-                    And finally we will copy the temp variable into the description and freeing the copy
-
-                    TL;DR Concatenates the already stored description with the current line
-                    */
+                    //Concatenates the already stored description with the current line
                     else {
-                        char *cpy = malloc((sizeof(char*) * strlen(objectList[objectCount-1]->desc)+(sizeof(char*) * (strlen(line) + 1))));
-                        strcpy(cpy, objectList[objectCount-1]->desc);
-                        strcat(cpy, line);
-                        free(objectList[objectCount-1]->desc);
-                        objectList[objectCount-1]->desc = strndup(cpy, strlen(cpy));
-                        free(cpy);
+                        strcat(objectList[objectCount-1]->desc , strdup(line));
                     }
                     break;
             }
@@ -210,25 +196,12 @@ Stack *readFile(Game* game, char *fileName) {
                 default:
                     //If there is no description, allocates memory for the description of size equal to the size of the line
                     if(!locationList[locationCount-1]->desc) {
-                        locationList[locationCount-1]->desc = strndup(line, strlen(line));
+                        locationList[locationCount-1]->desc = strdup(line);
                     }
 
-                    /*
-                    If there is already a description, meaning that we are reading a multi line description
-                    We are going to create a variable cpy of the size of the already stored description to which will be added the size of the current line
-                    We are then going to copy the already stored description in the cpy variable And concatenate it with the current line
-                    Then we are going to reallocate the already stored description to its size plus the size of the current line  
-                    And finally we will copy the temp variable into the description and freeing the copy
-
-                    TL;DR Concatenates the already stored description with the current line
-                    */
+                    //Concatenates the already stored description with the current line
                     else {
-                        char *cpy = malloc((sizeof(char*) * strlen(locationList[locationCount-1]->desc)+(sizeof(char*) * (strlen(line) + 1))));
-                        strcpy(cpy, locationList[locationCount-1]->desc);
-                        strcat(cpy, line);
-                        free(locationList[locationCount-1]->desc);
-                        locationList[locationCount-1]->desc = strndup(cpy, strlen(cpy));
-                        free(cpy);
+                        strcat(locationList[locationCount-1]->desc, strdup(line));
                     }
                     break;
             }
