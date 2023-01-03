@@ -31,30 +31,7 @@ Location *LocationNew(char *name, char *desc) {
  * Binds a location to a direction of a certain other location
 */
 void LocationSetExit(Location *location, Direction direction, Location *destination) {
-    switch(direction) {
-        case NORTH:
-            location->directions[0] = destination;
-            break;
-        case EAST:
-            location->directions[1] = destination;
-            break;
-        case SOUTH:
-            location->directions[2] = destination;
-            break;
-        case WEST:
-            location->directions[3] = destination;
-            break;
-        case UP:
-            location->directions[4] = destination;
-            break;
-        case DOWN:
-            location->directions[5] = destination;
-            break;
-        default:
-            return;
-            break;
-    }
-
+    location->directions[direction] = destination;
 }
 
 void LocationDelete(Location *location) {
