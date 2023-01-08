@@ -24,9 +24,9 @@ Stack *StackPush(Stack *stack, Location *location){
 }
 
 Location *StackHead(Stack *stack){
-    return stack->location;
+    if(!StackIsEmpty(stack)) return stack->location;
 }
 
 Stack *StackPop(Stack *stack){
-    return stack->next;
+    if(!StackIsEmpty(stack) && !StackIsEmpty(stack->next)) return stack->next;
 }
