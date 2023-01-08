@@ -255,4 +255,5 @@ void LocationDestroy(Game* game) {
         LocationDelete(StackHead(temp));
         temp = StackPop(temp);
     }
+    free(game->locationStack);
 }
