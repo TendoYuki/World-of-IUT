@@ -186,7 +186,7 @@ Stack *readFile(Game* game, char *fileName) {
         }
     }
 
-    Stack *locationStack = NULL;
+    Stack *locationStack = malloc(sizeof(Stack));
     for (int j = 0; j < objectCount ; j++) {
         //Removes the /n at the end of the description of the current object
         char *temp = malloc((sizeof(char*) * strlen(objectList[j]->desc)+(sizeof(char*))));
@@ -245,7 +245,7 @@ Stack *readFile(Game* game, char *fileName) {
 Location *LocationInit(Game* game) {
     Stack *locationStack = readFile(game, "world.txt");
     game->locationStack = locationStack;
-    return StackHead(locationStack);
+    return StackHead(game->locationStack);
 }
 
 void LocationDestroy(Game* game) {
